@@ -28,7 +28,8 @@ import {EffectComposer} from 'https://threejsfundamentals.org/threejs/resources/
 import {RenderPass} from 'https://threejsfundamentals.org/threejs/resources/threejs/r110/examples/jsm/postprocessing/RenderPass.js';
 import {BloomPass} from 'https://threejsfundamentals.org/threejs/resources/threejs/r110/examples/jsm/postprocessing/BloomPass.js';
 import {FilmPass} from 'https://threejsfundamentals.org/threejs/resources/threejs/r110/examples/jsm/postprocessing/FilmPass.js';
-import {CustomPass} from './postprocessing/customPass.js';
+import {CustomPass} from './postprocessing/CustomPass.js';
+import {NewTestPass} from './postprocessing/newTestPass.js';
 
 import {GUI} from 'https://threejsfundamentals.org/threejs/../3rdparty/dat.gui.module.js';
 
@@ -57,7 +58,7 @@ function main() {
 
 	var imageTexture = new THREE.TextureLoader().load( 'textures/image.jpg' );
 	var envTexture = new THREE.TextureLoader().load( 'textures/map.jpg' );
-
+	var testGif = new THREE.TextureLoader().load( 'textures/testGif.gif' );
 
 	var loader = new THREE.FontLoader();
 	loader.load( 'fonts/helvetiker_bold.typeface.json', function ( font )
@@ -96,22 +97,17 @@ function main() {
 
 		var mesh = new THREE.Mesh( geometry, material );
 		mesh.position.z = - 19;
-
 		var box = new THREE.Box3().setFromObject( mesh );
 		//console.log( box.min, box.max, box.getSize() );
-
 		mesh.position.x = textX ;
+	//	const followObjMat = new THREE.MeshBasicMaterial({ color: 0xeb4034});
 
-		const followObjMat = new THREE.MeshBasicMaterial({ color: 0xeb4034});
-		const followObjGeo = new THREE.PlaneGeometry(1,1,.5);
 
-		//
+		const followObjMat = new THREE.MeshBasicMaterial( { map: testGif , transparent: true } )
+		const followObjGeo = new THREE.PlaneGeometry(4,4,.5);
 		// var followBox = new THREE.Box3().setFromObject( followObjMat );
 		// followBox.center( followObjMat.position ); // this re-sets the mesh position
 		// followObjMat.position.multiplyScalar( - 1 );
-
-
-
 		const followObj = new THREE.Mesh(followObjGeo, followObjMat);
 
 		followObj.position.z = -2;
@@ -122,6 +118,8 @@ function main() {
 		//var followbox = new THREE.BoxHelper( followObj, 0xffff00 );
 		//scene.add( followbox );
 		//scene.add( followBox2 );
+
+
 
 	  scene.add(followObj);
 
@@ -176,10 +174,15 @@ function main() {
 	      1.   // our cool value
 	  );
 
-		customPass.renderToScreen = true;
+		const testPass = new NewTestPass(
+				1.   // our cool value
+		);
+
+		testPass.renderToScreen = true;
 
 		composer.addPass(filmPass);
 		composer.addPass(customPass);
+		composer.addPass(testPass);
 
 	//	composer.addPass(customPass);
 

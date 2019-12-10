@@ -33,9 +33,14 @@ const newTestPassShader = {
 			// sample the source
 			"vec4 cTextureScreen = texture2D( mainTexture, vUv );",
 
-      "cTextureScreen.rgb = sin(cTextureScreen.rgb * vec3(0.33, 0.66, 1.) + length(cTextureScreen) + coolValue) * 0.5 + 0.5;",
+    //  "cTextureScreen.rgb = sin(cTextureScreen.rgb * vec3(0.33, 0.66, 1.) + length(cTextureScreen) + coolValue) * 0.5 + 0.5;",
 
-			"gl_FragColor =  vec4( 1. - cTextureScreen.rgb, cTextureScreen.a );",
+			"cTextureScreen.rgb += .5 + cTextureScreen.rgb - length(sin(cTextureScreen));",
+
+			"cTextureScreen.rgb += length(.2*sin(cTextureScreen.r));",
+
+
+			"gl_FragColor =  vec4( .9 - cTextureScreen.rgb, cTextureScreen.a );",
 
 		"}"
 
